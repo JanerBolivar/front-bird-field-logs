@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from "react-helmet-async";
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from "../../contexts/useAuth";
 import {
@@ -14,11 +15,13 @@ import {
     Leaf,
     TreePine,
     Target,
-    FlaskConical
+    FlaskConical,
+    Plus
 } from 'lucide-react';
 
 const ResearchListPage = () => {
     const { user, token } = useAuth();
+    const navigate = useNavigate();
     const [researches, setResearches] = useState([]);
     const [filteredResearches, setFilteredResearches] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -101,6 +104,14 @@ const ResearchListPage = () => {
         return IconComponent;
     };
 
+    const handleCreateResearch = () => {
+        alert('La función de creación de investigación no está disponible actualmente.');
+    };
+
+    const handleResearchClick = (uuid) => {
+        navigate(`/research-detail/${uuid}`);
+    };
+
     return (
         <>
             <Helmet>
@@ -128,7 +139,7 @@ const ResearchListPage = () => {
                 </div>
 
                 <div className={`relative w-full max-w-7xl mx-auto transform transition-all duration-1000 ${isAnimated ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
-                    <div className="text-center mb-8">
+                    <div className="flex justify-between items-center mb-8">
                         <div className="inline-block group cursor-pointer">
                             <div className="relative">
                                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full blur-md opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
@@ -140,19 +151,26 @@ const ResearchListPage = () => {
                                 </div>
                             </div>
                         </div>
+                        <button
+                            onClick={handleCreateResearch}
+                            className="flex items-center justify-center px-6 py-3 bg-emerald-600 text-white font-medium rounded-xl hover:bg-emerald-700 focus:ring-2 focus:ring-emerald-200 transition-all duration-200 shadow-lg hover:shadow-emerald-200/50"
+                        >
+                            <Plus className="w-5 h-5 mr-2" />
+                            <span>Crear Investigación</span>
+                        </button>
+                    </div>
 
-                        <div className="mt-6 space-y-3">
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-teal-700 to-green-700 bg-clip-text text-transparent">
-                                Amazon Birds Research
-                            </h1>
-                            <h2 className="text-xl font-semibold text-gray-700 flex items-center justify-center space-x-2">
-                                <MapPin className="w-5 h-5 text-emerald-600" />
-                                <span>Región Amazónica Colombiana</span>
-                            </h2>
-                            <h3 className="text-lg font-medium text-gray-600">
-                                Listado de Investigaciones
-                            </h3>
-                        </div>
+                    <div className="text-center mb-6 space-y-3">
+                        <h1 className="text-3xl font-bold bg-gradient-to-r from-emerald-700 via-teal-700 to-green-700 bg-clip-text text-transparent">
+                            Amazon Birds Research
+                        </h1>
+                        <h2 className="text-xl font-semibold text-gray-700 flex items-center justify-center space-x-2">
+                            <MapPin className="w-5 h-5 text-emerald-600" />
+                            <span>Región Amazónica Colombiana</span>
+                        </h2>
+                        <h3 className="text-lg font-medium text-gray-600">
+                            Listado de Investigaciones
+                        </h3>
                     </div>
 
                     <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl border border-emerald-100/50 p-6 mb-8">
@@ -189,7 +207,8 @@ const ResearchListPage = () => {
                                         return (
                                             <div
                                                 key={research.uuid}
-                                                className={`bg-gradient-to-br ${getBackgroundGradient(index)} rounded-3xl overflow-hidden border transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] group relative h-[300px] ${isLeader(research)
+                                                onClick={() => handleResearchClick(research.uuid)}
+                                                className={`bg-gradient-to-br ${getBackgroundGradient(index)} rounded-3xl overflow-hidden border transition-all duration-500 hover:shadow-2xl hover:scale-[1.02] group relative h-[300px] cursor-pointer ${isLeader(research)
                                                     ? 'border-emerald-400 shadow-emerald-200/50'
                                                     : isTeamMember(research)
                                                         ? 'border-teal-400 shadow-teal-200/50'

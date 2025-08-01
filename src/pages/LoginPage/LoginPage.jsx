@@ -49,7 +49,6 @@ const LoginPage = () => {
 
         // Simulación de login
         try {
-
             const response = await axios.post('/api/users/login', {
                 email,
                 password
@@ -82,8 +81,13 @@ const LoginPage = () => {
         }
 
         alert('Esta funcionalidad no está disponible en este momento. Por favor, revisa más tarde.');
+    };
 
-        //setSuccessMessage('Se ha enviado un enlace de recuperación a tu correo electrónico.');
+    // Manejar la tecla Enter
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !isLoading) {
+            handleLogin(e);
+        }
     };
 
     return (
@@ -152,7 +156,7 @@ const LoginPage = () => {
                     </div>
 
                     {/* Formulario principal */}
-                    <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-3xl border border-emerald-100/50 p-8 space-y-6">
+                    <div className="bg-white/90 backdrop-blur-sm shadow-2xl rounded-3xl border border-emerald-100/50 p-8 space-y-6" onKeyDown={handleKeyDown}>
                         <div className="text-center mb-6">
                             <h4 className="text-lg font-semibold text-gray-700 flex items-center justify-center space-x-2">
                                 <Search className="w-5 h-5 text-teal-600" />
